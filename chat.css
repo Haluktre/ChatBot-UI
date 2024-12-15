@@ -1,0 +1,175 @@
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color: rgba(0, 0, 0, 0);
+color: #e0e0e0;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100vh;
+margin: 0;
+padding: 0;
+}
+
+#chat-container {
+width: 100%;
+max-width: 800px;
+height: 90%;
+background-color: #1e1e1e;
+border-radius: 15px;
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+display: flex;
+flex-direction: column;
+}
+
+#messages {
+flex: 1;
+padding: 20px;
+overflow-y: auto;
+margin-bottom: 15px;
+}
+
+.message {
+padding: 12px;
+margin-bottom: 12px;
+border-radius: 10px;
+background-color: #333;
+word-wrap: break-word;
+max-width: fit-content;
+width: auto;
+}
+
+.message.user {
+background-color: #3f51b5;
+margin-left: auto;
+text-align: right;
+}
+
+.message.bot {
+background-color: #616161;
+margin-right: auto;
+text-align: left;
+}
+
+.message img {
+max-width: 200px;
+max-height: 200px;
+border-radius: 10px;
+display: block;
+margin-top: 10px;
+}
+
+
+.highlight {
+background-color: #212121;
+padding: 15px;
+margin: 20px 0;
+border-radius: 10px;
+position: relative;
+overflow-x: auto;
+}
+
+.highlight pre[class*="language-"] {
+margin: 0;
+white-space: pre-wrap;
+}
+
+.highlight .copy-button {
+position: absolute;
+top: 10px;
+right: 10px;
+background-color: #f50057;
+color: white;
+border: none;
+padding: 6px;
+cursor: pointer;
+border-radius: 5px;
+}
+
+.input-container {
+display: flex;
+align-items: center;
+justify-content: center;
+width: 95%;
+margin-bottom: 20px;
+}
+
+#user-input {
+flex: 1;
+padding: 14px;
+border: none;
+border-radius: 10px;
+background-color: #333;
+color: white;
+font-size: 16px;
+resize: none;
+}
+
+#send-button {
+padding: 22px;
+background-color: #3f51b5;
+color: white;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+font-size: 18px;
+transition: background-color 0.3s;
+margin-left: 10px;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+#send-button i {
+font-size: 20px;
+}
+
+#send-button:hover {
+background-color: #283593;
+}
+
+#upload-label {
+padding: 14px 22px;
+background-color: #3f51b5;
+color: white;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+font-size: 18px;
+transition: background-color 0.3s;
+margin-right: 10px;
+margin-left: 40px;
+display: flex;
+align-items: center;
+justify-content: center;
+position: relative;
+}
+
+#upload-label i {
+margin-right: 10px;
+}
+
+#upload-label:hover {
+background-color: #283593;
+}
+
+#upload-status {
+position: absolute;
+bottom: -20px;
+left: 0;
+font-size: 14px;
+color: #e0e0e0;
+}
+
+::-webkit-scrollbar {
+width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+background-color: #616161;
+border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+background: #121212;
+}
