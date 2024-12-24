@@ -104,22 +104,58 @@ if (loadingMessage) loadingMessage.remove();
 const messageContainer = document.createElement('div');
 messageContainer.classList.add('message', 'bot');
 
-// Yanıtı Markdown benzeri işleme ile ele alalım
 const processText = (text) => {
-    const boldRegex = /\*\*(.*?)\*\*/g;
-    text = text.replace(boldRegex, '<strong>$1</strong>');
-    return text.replace(/\n/g, '<br>');
+    // Handle headings without extra line break
+    const headingRegex = /### (.*?)(?=\n|$)/g;
+        text = text.replace(headingRegex, '<h3>$1</h3>');
+
+        // Handle bold text
+        const boldRegex = /\*\*(.*?)\*\*/g;
+        text = text.replace(boldRegex, '<strong>$1</strong>');
+
+        // Handle line breaks, but remove extras after headings
+        text = text.replace(/\n/g, '<br>');
+        text = text.replace(/<\/h3><br>/g, '</h3>');
+    return text;
 };
 
-if (response.includes("```")) {
-    const parts = response.split(/```/);
-    parts.forEach((part, index) => {
+// Harf harf görünme fonksiyonu
+const typeWriter = (element, text, callback, i = 0) => {
+    // Create text parser
+    const parser = new DOMParser();
+    const virtualDoc = parser.parseFromString(text, 'text/html');
+    const textContent = virtualDoc.body.innerHTML;
+    
+    // Split content into chunks for better performance
+    const chunkSize = 3;
+    
+    const typeChunk = () => {
+        const chunk = textContent.substr(i, chunkSize);
+        if (i < textContent.length) {
+            element.innerHTML = textContent.substring(0, i + chunkSize);
+            i += chunkSize;
+            setTimeout(typeChunk, 40);
+        } else if (callback) {
+            callback();
+        }
+    };
+    
+    // Start typing animation
+    typeChunk();
+};
+
+const processParts = (parts, index = 0) => {
+    if (index >= parts.length) return;
+
+    const part = parts[index];
     if (index % 2 === 0) {
         if (part.trim()) {
-        const processedText = processText(part.trim());
-        const textNode = document.createElement('p');
-        textNode.innerHTML = processedText;
-        messageContainer.appendChild(textNode);
+            const processedText = processText(part.trim());
+            const textNode = document.createElement('p');
+            messageContainer.appendChild(textNode);
+            typeWriter(textNode, processedText, () => processParts(parts, index + 1));
+        } else {
+            processParts(parts, index + 1);
         }
     } else {
         const [firstLine, ...codeLines] = part.trim().split('\n');
@@ -133,19 +169,12 @@ if (response.includes("```")) {
         <button class="copy-button">Kopyala</button>
         `;
         messageContainer.appendChild(highlightedCode);
-
-        const copyButton = highlightedCode.querySelector('.copy-button');
-        copyButton.addEventListener('click', () => {
-        navigator.clipboard.writeText(codeContent);
-        });
+        processParts(parts, index + 1);
     }
-    });
-} else {
-    const processedText = processText(response);
-    const textNode = document.createElement('p');
-    textNode.innerHTML = processedText;
-    messageContainer.appendChild(textNode);
-}
+};
+
+const parts = response.split('```').filter(part => part.trim());
+processParts(parts);
 
 messagesContainer.appendChild(messageContainer);
 messagesContainer.scrollTop = messagesContainer.scrollHeight;
